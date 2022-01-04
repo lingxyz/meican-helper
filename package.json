@@ -1,0 +1,29 @@
+{
+  "name": "meican-helper",
+  "version": "1.0.0",
+  "description": "美餐助手。支持自动点餐、晒图、评价。防踩坑，防遗忘。",
+  "main": "main.js",
+  "scripts": {
+    "prd": "pm2 start main.js --name '美餐-助手'",
+    "restart-prd": "pm2 restart main.js --name '美餐-助手'",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhanglingme/meican-helper.git"
+  },
+  "keywords": [
+    "美餐-助手"
+  ],
+  "author": "Zero",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zhanglingme/meican-helper/issues"
+  },
+  "homepage": "https://github.com/zhanglingme/meican-helper#readme",
+  "dependencies": {
+    "axios": "^0.24.0",
+    "form-data": "^4.0.0",
+    "node-schedule": "^2.1.0"
+  }
+}
