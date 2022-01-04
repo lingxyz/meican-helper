@@ -4,10 +4,8 @@ const config = require('../config')
 /**
  * 自动点餐
  */
-module.exports = function() {
+module.exports = function(username, password) {
   ;(async function main() {
-    // todo: 改为循环用户，且随机等待1-5秒，抽离批量方法
-    const { username, password } = config.users[0]
     // 登录，拿到 remember = token
     const { remember } = await meicanApi.login(username, password)
     // 请求当前点餐结果
