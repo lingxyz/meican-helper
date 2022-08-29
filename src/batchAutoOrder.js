@@ -6,9 +6,8 @@ const autoOrder = require('./autoOrder')
  */
 module.exports = function() {
   config.users.forEach(item => {
-    const { username, password } = item
     // todo: 随机等待1-5秒
     // 调用autoOrder
-    autoOrder(username, password)
+    autoOrder(item)
   })
 }
