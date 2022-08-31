@@ -13,7 +13,7 @@ module.exports = function({username, password, defaultOrderType, orderType}) {
     const tabUniqueId = dateList[0].calendarItemList[0].userTab.uniqueId
     const isOrdered = !!dateList[0].calendarItemList[0].corpOrderUser
     if (isOrdered) {
-      console.log(`用户 ${username} 已点餐，自动点餐失败！`)
+      console.log(`用户 ${username} 已点餐，自动点餐失败！餐品为 ${dateList[0].calendarItemList[0].corpOrderUser.restaurantItemList[0].dishItemList[0].dish.name}`)
       return
     }
     /* step3: 拉取餐厅列表 */
@@ -49,10 +49,11 @@ module.exports = function({username, password, defaultOrderType, orderType}) {
     try {
       const orderResponseData = await meicanApi.orderAdd(remember, tabUniqueId, dishId)
       if (orderResponseData.status === 'SUCCESSFUL') {
-        console.log(`用户 ${username} 自动点餐成功，餐品为 ${dishList[1].name}`)
+        console.log(`用户 ${username} 自动点餐成功，餐品为 ${dishLists[randomIndex].name}`)
       }
     } catch (error) {
       console.log(`用户 ${username} 已点餐，自动点餐失败！`)
+      console.log('error: ', error)
     }
   })()
 }
