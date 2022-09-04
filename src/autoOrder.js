@@ -10,8 +10,8 @@ module.exports = function({username, password, defaultOrderType, orderType}) {
     const { remember } = await meicanApi.login(username, password)
     /* step2: 请求当前点餐结果 */
     // todo: 由于总是返回前一已点餐品，所以终止检查逻辑
-    // const { dateList } = await meicanApi.ordersShow(remember)
-    // const tabUniqueId = dateList[0].calendarItemList[0].userTab.uniqueId
+    const { dateList } = await meicanApi.ordersShow(remember)
+    const tabUniqueId = dateList[0].calendarItemList[0].userTab.uniqueId
     // const isOrdered = !!dateList[0].calendarItemList[0].corpOrderUser
     // if (isOrdered) {
     //   console.log(`用户 ${username} 已点餐，自动点餐失败！餐品为 ${dateList[0].calendarItemList[0].corpOrderUser.restaurantItemList[0].dishItemList[0].dish.name}`)
