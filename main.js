@@ -8,6 +8,6 @@ const batchAutoOrder = require('./src/batchAutoOrder')
 // batchAutoOrder()
 // return
 // 每天0点10分 8点 跑一次自动点餐脚本
-const crons = ['0 30 1 * * *', '0 0 8 * * *']
+const crons = ['0 10 0 * * *', '0 0 8 * * *']
 // const crons = ['* * * * * *']
 crons.forEach(cron => schedule(cron, batchAutoOrder))
