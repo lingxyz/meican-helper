@@ -6,8 +6,7 @@ const autoOrder = require('./autoOrder')
  */
 module.exports = function() {
   config.users.forEach(item => {
-    const { username, password } = item // 获取配置的账号密码
     const timer = Math.round(Math.random()*10) // 随机等待0-10秒
-    setTimeout(() => autoOrder(username, password), timer) // 调用autoOrder
+    setTimeout(() => autoOrder(item), timer) // 调用autoOrder
   })
 }
