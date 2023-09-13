@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>用户配置</title>
+  <!-- Include Vue 3 CDN -->
+  <script src="https://unpkg.com/vue@next"></script>
+  <!-- Include Vue Router 4 CDN -->
+  <script src="https://unpkg.com/vue-router@4"></script>
+  <!-- Include Element Plus CDN -->
+  <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css">
+  <script src="https://unpkg.com/element-plus"></script>
+  <!-- Include Axios CDN -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    <el-form>
+      <el-form-item label="用户名">
+        <el-input v-model="username"></el-input>
+      </el-form-item>
+      <el-form-item label="密码">
+        <el-input type="password" v-model="password"></el-input>
+      </el-form-item>
+      <el-form-item label="uid">
+        <el-input type="uid" v-model="uid"></el-input>
+      </el-form-item>
+      <!-- 其他表单项 -->
+      <el-button type="primary" @click="addUser">新增用户</el-button>
+    </el-form>
+
+    <el-table :data="tableData" style="width: 100%">
+      <el-table-column prop="id" label="ID" width="180"></el-table-column>
+      <el-table-column prop="username" label="用户名" width="180"></el-table-column>
+      <el-table-column prop="password" label="密码" width="180"></el-table-column>
+      <el-table-column prop="uid" label="wxPuser id"></el-table-column>
+    </el-table>
+  </div>
+
+  <script>
+    // 业务逻辑
+    const App = {
+      data() {
+        return {
+          tableData: [],
+          username: '',
+          password: '',
+          uid: ''
+        }
+      },
+      async mounted() {
+        // Send GET request using Axios
+        const { data } = await axios.get('/api/users')
+        this.tableData = data.data;
+      },
+      methods: {
+        async addUser () {
+          // 执行新增用户的逻辑
+          const { data } = await axios.post('/api/users', {
+            username: this.username,
+            password: this.password,
+            uid: this.uid})
+          alert(JSON.stringify(data))
+        }
+      }
+    };
+    // Initialize Vue app
+    const app = Vue.createApp(App);
+    // app.use(router);
+    app.use(ElementPlus);
+    app.mount('#app');
+  </script>
+</body>
+</html>

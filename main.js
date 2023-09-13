@@ -1,13 +1,23 @@
-const schedule = require('./lib/schedule')
-const batchAutoOrder = require('./src/batchAutoOrder')
-
 /**
- * 入口文件（主逻辑）
+ * 入口文件
  */
-// test: 立即执行一次
-// batchAutoOrder(); return;
+const Koa = require('koa');
+const bodyParser = require('koa-bodyparser');
+const serve = require('koa-static');
+const router = require('./controllers');
+const schedules = require('./schedules');
 
-// 每天0点10分 8点 跑一次自动点餐脚本
-const crons = ['0 10 0 * * *', '0 0 8 * * *']
-// const crons = ['* * * * * *']
-crons.forEach(cron => schedule(cron, batchAutoOrder))
+const app = new Koa();
+app.use(bodyParser());
+/* 加载后端接口 */
+app.use(router.routes());
+/* 加载前端文件 */
+app.use(serve('views'));
+
+/* 开启服务 */
+app.listen(3001, () => {
+  console.log('Server started on http://localhost:3001');
+});
+
+/* 开启定时任务 */
+schedules();

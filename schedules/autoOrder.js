@@ -1,11 +1,11 @@
-const meicanApi = require('../lib/meicanApi')
-const wxPusher = require("../lib/wxPusher")
-const config = require('../config')
+const meicanApi = require('../common/meicanApi')
+const wxPusher = require("../common/wxPusher")
+const services = require('../services')
 
 /**
  * 自动点餐
  */
-module.exports = function({username, password, uid, defaultOrderType, orderType}) {
+module.exports = function({username, password, uid, defaultOrderType, orderTypeDate, orderTypeKeyword}) {
   ;(async function main() {
     try {
       /* step1: 登录，拿到 remember = token */
@@ -38,9 +38,9 @@ module.exports = function({username, password, uid, defaultOrderType, orderType}
       /* step5: 下单 */
       // 下单自定义
       let dishId;
-      if (orderType.length) {
+      // if (orderType.length) {
         // todo: 自定义下单逻辑实现
-      }
+      // }
       // 关键字随机
       // 兜底：指定第几个 / 全部随机
       if (!dishId) {
@@ -54,14 +54,15 @@ module.exports = function({username, password, uid, defaultOrderType, orderType}
       console.log('>>>>>>>>', dishId)
       const orderResponseData = await meicanApi.orderAdd(remember, tabUniqueId, dishId, access_token)
       if (orderResponseData.status === 'SUCCESSFUL') {
-        console.log(`用户 ${username} 自动点餐成功，餐品为 ${dishLists[randomIndex].name}`)
+        console.log(`用户 ${username} 自动点餐成功，餐品为 ${dishLists[randomIndex].name}`);
+        services.addLogs(`用户 ${username} 自动点餐成功，餐品为 ${dishLists[randomIndex].name}`);
       }
     } catch (error) {
       const errorMessage = `code: ${error.response.status}, data: ${JSON.stringify(error.response.data)}`
       /* 点餐失败推送通知 */
       wxPusher(`用户 ${username} 自动点餐失败！请手动点餐！`, `点击上方链接重新点餐！↑↑↑\n账号：${username}\npassword:${password}\n报错信息：${errorMessage}`, uid)
-      console.log(`用户 ${username} 自动点餐失败！`)
-      console.log('error: ', errorMessage)
+      console.log(`用户 ${username} 自动点餐失败！error信息：` + errorMessage);
+      services.addLogs(`用户 ${username} 自动点餐失败！error信息：` + errorMessage);
     }
   })()
 }

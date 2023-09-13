@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>自动点餐-执行日志</title>
+  <!-- Include Vue 3 CDN -->
+  <script src="https://unpkg.com/vue@next"></script>
+  <!-- Include Vue Router 4 CDN -->
+  <script src="https://unpkg.com/vue-router@4"></script>
+  <!-- Include Element Plus CDN -->
+  <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css">
+  <script src="https://unpkg.com/element-plus"></script>
+  <!-- Include Axios CDN -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    <a class="el-button el-button--primary" href="https://meican.com/">去点餐</a>
+
+    <el-table :data="tableData" style="width: 100%">
+      <el-table-column prop="id" label="ID" width="180"></el-table-column>
+      <el-table-column prop="created_at" label="创建时间" width="180"></el-table-column>
+      <el-table-column prop="text" label="日志信息"></el-table-column>
+    </el-table>
+  </div>
+
+  <script>
+    // 业务逻辑
+    const App = {
+      data() {
+        return {
+          tableData: []
+        }
+      },
+      async mounted() {
+        // Send GET request using Axios
+        const { data } = await axios.get('/api/schedule/logs')
+        this.tableData = data.data;
+      }
+    };
+    // Initialize Vue app
+    const app = Vue.createApp(App);
+    // app.use(router);
+    app.use(ElementPlus);
+    app.mount('#app');
+  </script>
+</body>
+</html>
