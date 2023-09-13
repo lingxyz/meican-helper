@@ -18,7 +18,7 @@ module.exports = function(summary, content, uid) {
       "uids":[//发送目标的UID，是一个数组。注意uids和topicIds可以同时填写，也可以只填写一个。
         uid || 'UID_5MkDcdqLsVHEJdxIoA6JwjUwnHvB'
       ],
-      "url":"https://meican.com" //原文链接，可选参数
+      "url":"https://workbench.zhangling.site/" //原文链接，可选参数
     }
   }).getBody().toString()
 
