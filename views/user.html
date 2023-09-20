@@ -15,6 +15,10 @@
 </head>
 <body>
   <div id="app">
+    <br>
+    <br>
+    <br>
+
     <el-form>
       <el-form-item label="用户名">
         <el-input v-model="username"></el-input>
@@ -29,11 +33,25 @@
       <el-button type="primary" @click="addUser">新增用户</el-button>
     </el-form>
 
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
     <el-table :data="tableData" style="width: 100%">
-      <el-table-column prop="id" label="ID" width="180"></el-table-column>
-      <el-table-column prop="username" label="用户名" width="180"></el-table-column>
-      <el-table-column prop="password" label="密码" width="180"></el-table-column>
-      <el-table-column prop="uid" label="wxPuser id"></el-table-column>
+      <el-table-column prop="id" label="ID" width="40"></el-table-column>
+      <el-table-column prop="username" label="用户名" width="220"></el-table-column>
+      <el-table-column prop="password" label="密码" width="120"></el-table-column>
+      <el-table-column prop="uid" label="wxPuser id" width="180"></el-table-column>
+      <el-table-column prop="statusText" label="状态" width="80"></el-table-column>
+      <el-table-column label="操作">
+        <template #default="{ row }">
+          <el-button type="primary" mini @click="changeStatus(row)">{{['开启', '关闭'][row.status]}}</el-button>
+          <el-button type="danger" mini @click="deleteUser(row)">删除</el-button>
+        </template>
+      </el-table-column>
     </el-table>
   </div>
 
@@ -48,18 +66,42 @@
           uid: ''
         }
       },
-      async mounted() {
-        // Send GET request using Axios
-        const { data } = await axios.get('/api/users')
-        this.tableData = data.data;
+      mounted() {
+        this.fetchUsers();
       },
       methods: {
+        // API: 获取用户列表
+        async fetchUsers() {
+          const { data } = await axios.get('/api/users')
+          data.data.forEach(element => {
+            element.statusText = ['关闭', '开启'][element.status]
+          });
+          this.tableData = data.data;
+        },
+        // API: 执行新增用户的逻辑
         async addUser () {
-          // 执行新增用户的逻辑
           const { data } = await axios.post('/api/users', {
             username: this.username,
             password: this.password,
             uid: this.uid})
+          if (data.status === 200) this.fetchUsers();
+          alert(JSON.stringify(data))
+        },
+        // API：执行开启/关闭用户的逻辑
+        async changeStatus (row) {
+          const { data } = await axios.post('/api/users/editStatus', {
+            id: row.id,
+            status: +!row.status
+          })
+          if (data.status === 200) this.fetchUsers();
+          alert(JSON.stringify(data))
+        },
+        // API: 执行删除用户的逻辑
+        async deleteUser (row) {
+          const { data } = await axios.post('/api/users/deleteUser', {
+            id: row.id
+          })
+          if (data.status === 200) this.fetchUsers();
           alert(JSON.stringify(data))
         }
       }

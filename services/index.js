@@ -1,5 +1,8 @@
+const path = require('path');
+
 const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database(':memory:');
+const dbPath = path.join(__dirname, '..', 'database', 'database.db');
+const db = new sqlite3.Database(dbPath);
 
 /* 初始化数据库 */
 const database = require('../database');
@@ -7,9 +10,9 @@ const database = require('../database');
 database(db);
 
 // 获取用户配置信息
-exports.getUsers = async () => {
+exports.getUsers = async (status) => {
   return new Promise((resolve, reject) => {
-    db.all("SELECT * FROM users ORDER BY id DESC", (err, rows) => {
+    db.all('SELECT * FROM users ' + (status != undefined ? 'WHERE status = ? ' : '') + 'ORDER BY id DESC', [status], (err, rows) => {
       if (err) {
         reject(err);
       } else {
@@ -23,6 +26,32 @@ exports.getUsers = async () => {
 exports.addUser = async (username, password, uid) => {
   return new Promise((resolve, reject) => {
     db.run("INSERT INTO users (username, password, uid) VALUES (?, ?, ?)", [username, password, uid], (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+};
+
+// 用户配置：修改状态
+exports.editStatus = async (id, status) => {
+  return new Promise((resolve, reject) => {
+    db.run("UPDATE users SET status = ? WHERE id = ?", [status, id], (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+};
+
+// 用户配置：删除用户
+exports.deleteUser = async (id, status) => {
+  return new Promise((resolve, reject) => {
+    db.run("DELETE FROM users WHERE id = ?", [id], (err) => {
       if (err) {
         reject(err);
       } else {
