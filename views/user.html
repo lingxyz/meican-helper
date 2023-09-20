@@ -24,8 +24,8 @@
 
     <!-- 新增用户 -->
     <el-button type="primary" plain @click="dialogVisible = true">新增用户</el-button>
-    <el-dialog v-model="dialogVisible" title="新增用户" :visible.sync="dialogVisible">
-      <el-form>
+    <el-dialog v-model="dialogVisible" title="新增用户" :visible.sync="dialogVisible" style="width: 90%;max-width: 460px;">
+      <el-form label-width="60px">
         <el-form-item label="用户名">
           <el-input v-model="username"></el-input>
         </el-form-item>
@@ -36,9 +36,9 @@
           <el-input type="uid" v-model="uid"></el-input>
         </el-form-item>
       </el-form>
-      <div slot="footer">
+      <div slot="footer" style="display: flex; justify-content: center;">
         <el-button mini @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" mini @click="addUser">新增用户</el-button>
+        <el-button type="primary" mini @click="addUser">提交</el-button>
       </div>
     </el-dialog>
 
@@ -54,7 +54,7 @@
       <el-table-column prop="statusText" label="状态" width="80"></el-table-column>
       <el-table-column label="操作" min-width="180">
         <template #default="{ row }">
-          <el-button type="primary" mini @click="changeStatus(row)">{{['开启', '关闭'][row.status]}}</el-button>
+          <el-button :type="['primary', 'info'][row.status]" :plain="row.status === 1" mini @click="changeStatus(row)">{{['开启', '关闭'][row.status]}}</el-button>
           <el-button type="danger" mini @click="deleteUser(row)">删除</el-button>
         </template>
       </el-table-column>
