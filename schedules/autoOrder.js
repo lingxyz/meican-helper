@@ -9,7 +9,7 @@ module.exports = function({username, password, uid, defaultOrderType, orderTypeD
   ;(async function main() {
     try {
       /* step1: 登录，拿到 remember = token */
-      const { remember, access_token } = await meicanApi.login(username, password)
+      const { data: {remember, access_token} } = await meicanApi.login(username, password)
       console.log('remember: ', remember)
       console.log('access_token: ', access_token)
       /* step2: 请求当前点餐结果 */

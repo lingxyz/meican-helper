@@ -31,14 +31,14 @@ async function login(username, password) {
   let response
   try {
     response = await axios(config)
+    const remember = response.headers['set-cookie'][0].split(';')[0].split('=')[1]
+    response.data.remember = remember
+    console.log(`用户 ${username} 登陆成功！${Date()}`)
+    return response
   } catch (error) {
     console.log(error)
+    return error.response
   }
-
-  const remember = response.headers['set-cookie'][0].split(';')[0].split('=')[1]
-  response.data.remember = remember
-  console.log(`用户 ${username} 登陆成功！${Date()}`)
-  return response.data
 }
 
 /**

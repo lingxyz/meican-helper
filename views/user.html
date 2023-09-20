@@ -49,7 +49,7 @@
     <el-table :data="tableData" style="width: 100%">
       <el-table-column prop="id" label="ID" width="40"></el-table-column>
       <el-table-column prop="username" label="用户名" width="220"></el-table-column>
-      <el-table-column prop="password" label="密码" width="120"></el-table-column>
+      <el-table-column prop="passwordText" label="密码" width="80"></el-table-column>
       <el-table-column prop="uid" label="wxPuser id" width="180"></el-table-column>
       <el-table-column prop="statusText" label="状态" width="80"></el-table-column>
       <el-table-column label="操作" min-width="180">
@@ -82,6 +82,7 @@
           const { data } = await axios.get('/api/users')
           data.data.forEach(element => {
             element.statusText = ['关闭', '开启'][element.status]
+            element.passwordText = '****'
           });
           this.tableData = data.data;
         },

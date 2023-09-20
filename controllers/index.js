@@ -1,6 +1,7 @@
 const Router = require('koa-router');
 const router = new Router();
 const service = require('../services');
+const meicanApi = require('../common/meicanApi')
 
 // 用户配置：查询
 router.get('/api/users', async (ctx) => {
@@ -19,6 +20,14 @@ router.post('/api/users', async (ctx) => {
   const password = ctx.request.body.password;
   const uid = ctx.request.body.uid;
 
+  // 检验用户名密码
+  const res = await meicanApi.login(username, password)
+  if (res.status !== 200) {
+    ctx.body = { status: res.status, message: res.data.error_description };
+    return;
+  }
+
+  // 保留用户信息
   try {
     await service.addUser(username, password, uid);
     ctx.body = { status: 200, message: 'user config added' };
