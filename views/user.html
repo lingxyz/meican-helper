@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>用户配置</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Include Vue 3 CDN -->
   <script src="https://unpkg.com/vue@next"></script>
   <!-- Include Vue Router 4 CDN -->
@@ -15,38 +16,43 @@
 </head>
 <body>
   <div id="app">
-    <br>
-    <br>
-    <br>
-
-    <el-form>
-      <el-form-item label="用户名">
-        <el-input v-model="username"></el-input>
-      </el-form-item>
-      <el-form-item label="密码">
-        <el-input type="password" v-model="password"></el-input>
-      </el-form-item>
-      <el-form-item label="uid">
-        <el-input type="uid" v-model="uid"></el-input>
-      </el-form-item>
-      <!-- 其他表单项 -->
-      <el-button type="primary" @click="addUser">新增用户</el-button>
-    </el-form>
+    <a class="el-button is-plain" href="/" style="text-decoration: none;">回首页</a>
 
     <br>
     <br>
     <br>
-    <br>
+
+    <!-- 新增用户 -->
+    <el-button type="primary" plain @click="dialogVisible = true">新增用户</el-button>
+    <el-dialog v-model="dialogVisible" title="新增用户" :visible.sync="dialogVisible">
+      <el-form>
+        <el-form-item label="用户名">
+          <el-input v-model="username"></el-input>
+        </el-form-item>
+        <el-form-item label="密码">
+          <el-input type="password" v-model="password"></el-input>
+        </el-form-item>
+        <el-form-item label="uid">
+          <el-input type="uid" v-model="uid"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button mini @click="dialogVisible = false">取消</el-button>
+        <el-button type="primary" mini @click="addUser">新增用户</el-button>
+      </div>
+    </el-dialog>
+
     <br>
     <br>
 
+    <!-- 用户列表 -->
     <el-table :data="tableData" style="width: 100%">
       <el-table-column prop="id" label="ID" width="40"></el-table-column>
       <el-table-column prop="username" label="用户名" width="220"></el-table-column>
       <el-table-column prop="password" label="密码" width="120"></el-table-column>
       <el-table-column prop="uid" label="wxPuser id" width="180"></el-table-column>
       <el-table-column prop="statusText" label="状态" width="80"></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" min-width="180">
         <template #default="{ row }">
           <el-button type="primary" mini @click="changeStatus(row)">{{['开启', '关闭'][row.status]}}</el-button>
           <el-button type="danger" mini @click="deleteUser(row)">删除</el-button>
@@ -63,7 +69,8 @@
           tableData: [],
           username: '',
           password: '',
-          uid: ''
+          uid: '',
+          dialogVisible: false, // 控制弹窗的显示和隐藏
         }
       },
       mounted() {
@@ -85,7 +92,8 @@
             password: this.password,
             uid: this.uid})
           if (data.status === 200) this.fetchUsers();
-          alert(JSON.stringify(data))
+          ElementPlus.ElMessage({type: data.status === 200 ? 'success' : 'error', message: JSON.stringify(data), duration: 2000})
+          this.dialogVisible = false
         },
         // API：执行开启/关闭用户的逻辑
         async changeStatus (row) {
@@ -94,7 +102,7 @@
             status: +!row.status
           })
           if (data.status === 200) this.fetchUsers();
-          alert(JSON.stringify(data))
+          ElementPlus.ElMessage({type: data.status === 200 ? 'success' : 'error', message: JSON.stringify(data), duration: 2000})
         },
         // API: 执行删除用户的逻辑
         async deleteUser (row) {
@@ -102,7 +110,7 @@
             id: row.id
           })
           if (data.status === 200) this.fetchUsers();
-          alert(JSON.stringify(data))
+          ElementPlus.ElMessage({type: data.status === 200 ? 'success' : 'error', message: JSON.stringify(data), duration: 2000})
         }
       }
     };

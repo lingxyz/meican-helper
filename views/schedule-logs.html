@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>自动点餐-执行日志</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Include Vue 3 CDN -->
   <script src="https://unpkg.com/vue@next"></script>
   <!-- Include Vue Router 4 CDN -->
@@ -15,12 +16,17 @@
 </head>
 <body>
   <div id="app">
-    <a class="el-button el-button--primary" href="https://meican.com/">去点餐</a>
+    <a class="el-button is-plain" href="/" style="text-decoration: none;">回首页</a>
 
-    <el-table :data="tableData" style="width: 100%">
-      <el-table-column prop="id" label="ID" width="180"></el-table-column>
+    <br>
+    <br>
+    <br>
+
+
+    <el-table :data="tableData" style="width:100%">
+      <el-table-column prop="id" label="ID" width="40"></el-table-column>
       <el-table-column prop="created_at" label="创建时间" width="180"></el-table-column>
-      <el-table-column prop="text" label="日志信息"></el-table-column>
+      <el-table-column prop="text" label="日志信息" min-width="180"></el-table-column>
     </el-table>
   </div>
 
