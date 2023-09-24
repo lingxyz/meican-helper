@@ -56,11 +56,13 @@ module.exports = function({username, password, uid, defaultOrderType, orderTypeD
       if (orderResponseData.status === 'SUCCESSFUL') {
         console.log(`用户 ${username} 自动点餐成功，餐品为 ${dishLists[randomIndex].name}`);
         services.addLogs(`用户 ${username} 自动点餐成功，餐品为 ${dishLists[randomIndex].name}`);
-      }
+      } else throw new Error('点餐失败');
     } catch (error) {
       const errorMessage = `code: ${error.response.status}, data: ${JSON.stringify(error.response.data)}`
       /* 点餐失败推送通知 */
-      wxPusher(`用户 ${username} 自动点餐失败！请手动点餐！`, `点击上方链接重新点餐！↑↑↑\n账号：${username}\npassword:${password}\n报错信息：${errorMessage}`, uid)
+      if (error.response.data.error == 'CORP_MEMBER_ORDER_EXISTS') {// 已点餐。不推送。但记录日志。
+        wxPusher(`用户 ${username} 自动点餐失败！请手动点餐！`, `点击上方链接重新点餐！↑↑↑\n账号：${username}\npassword:${password}\n报错信息：${errorMessage}`, uid)
+      }
       console.log(`用户 ${username} 自动点餐失败！error信息：` + errorMessage);
       services.addLogs(`用户 ${username} 自动点餐失败！error信息：` + errorMessage);
     }
